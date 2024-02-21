@@ -1,8 +1,7 @@
 package com.example.learningesapi;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch.core.IndexResponse;
-import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.*;
 import com.example.learningesapi.po.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,15 @@ public class ESDocumentTest {
                 .index("products")
                 .id(product.getSku())
                 .document(product));
-        client.create()
+    }
+
+    @Test
+    void testAddDocument2ByCreate() throws IOException {
+        Product product = new Product("bk-2", "GH bike", 33.3F);
+        CreateResponse response = client.create(r -> r
+                .index("products")
+                .id(product.getSku())
+                .document(product));
     }
 
     @Test
@@ -43,6 +50,36 @@ public class ESDocumentTest {
         client.index(i -> i
                 .index("products")
                 .withJson(input));
+    }
+
+    @Test
+    void testDeleteDocument() throws IOException {
+        client.delete(d -> d
+                .index("products")
+                .id("bk-2"));
+    }
+
+    @Test
+    void testUpdateDocument() throws IOException {
+        Product product = new Product("car-1", "BYD car", 666.0F);
+        UpdateResponse<Product> response = client.update(u -> u
+                .index("products")
+                .id(product.getSku())
+                .doc(product), Product.class);
+    }
+
+    @Test
+    void testGetDocument() throws IOException {
+        GetResponse<Product> response = client.get(g -> g
+                .index("products")
+                .id("bk-1"), Product.class);
+
+        if (response.found()) {
+            Product product = response.source();
+            log.info("Product: {}", product);
+        } else {
+            log.info("Product not found");
+        }
     }
 
     @Test

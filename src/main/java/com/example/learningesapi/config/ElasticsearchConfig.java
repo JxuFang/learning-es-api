@@ -6,15 +6,15 @@ import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @Author: Fang Jinxu
  * @Description:
  * @Date: 2024-02-20 22:29
  */
-@AutoConfiguration
+@Configuration
 public class ElasticsearchConfig {
 
     // Create the low-level client
